@@ -24,8 +24,8 @@
 
 #include <stdlib.h>
 
-#include "llvm/LLVMContext.h"
-#include "llvm/Module.h"
+#include "llvm/IR/LLVMContext.h"
+#include "llvm/IR/Module.h"
 
 #include "load_vm_ops.h"
 #include "load_embedded_bc.h"

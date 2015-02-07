@@ -24,8 +24,8 @@
 
 #include <stdlib.h>
 
-#include "llvm/Module.h"
-#include "llvm/LLVMContext.h"
+#include "llvm/IR/Module.h"
+#include "llvm/IR/LLVMContext.h"
 
 #include "load_liblua_main.h"
 #include "load_embedded_bc.h"

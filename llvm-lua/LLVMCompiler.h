@@ -26,8 +26,8 @@
 #define LLVMCOMPILER_h
 
 #include "llvm/Support/IRBuilder.h"
-#include "llvm/Module.h"
-#include "llvm/LLVMContext.h"
+#include "llvm/IR/Module.h"
+#include "llvm/IR/LLVMContext.h"
 
 #include "lua_core.h"
 
