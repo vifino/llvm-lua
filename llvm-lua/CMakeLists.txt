@@ -219,7 +219,7 @@ add_executable(llvm-luac ${LLVM_LUAC_SRC})
 add_target_properties(llvm-luac COMPILE_FLAGS "${COMMON_CFLAGS} ${LLVM_CFLAGS}")
 add_target_properties(llvm-luac LINK_FLAGS
 	"${LD_FLAGS} ${COMMON_LDFLAGS} ${LLVM_LFLAGS}")
-target_link_libraries(llvm-luac ${LLVM_LUA_MAIN_LIB} ${LLVM_ALL_LIBS} dl)
+target_link_libraries(llvm-luac ${LLVM_LUA_MAIN_LIB} ${LLVM_ALL_LIBS} z dl)
 set(LLVM_LUA_BINS llvm-luac)
 
 #
