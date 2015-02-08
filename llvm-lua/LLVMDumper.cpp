@@ -24,12 +24,12 @@
 
 #include "llvm/IR/DerivedTypes.h"
 #include "llvm/IR/Module.h"
-#include "llvm/Target/TargetData.h"
-#include "llvm/Linker.h"
+#include "llvm/Linker/Linker.h"
 #include "llvm/IR/Verifier.h"
 #include "llvm/Bitcode/ReaderWriter.h"
 #include "llvm/Support/CommandLine.h"
 #include "llvm/Support/raw_ostream.h"
+#include "llvm/Support/FileSystem.h"
 #include <string>
 #include <vector>
 #include <fstream>
@@ -55,7 +55,7 @@ static llvm::cl::opt<bool> NoMain("no-main",
 
 LLVMDumper::LLVMDumper(LLVMCompiler *compiler_) : compiler(compiler_) {
 	std::vector<llvm::Type *> fields;
-	llvm::TargetData *type_info;
+	llvm::DataLayout *type_info;
 	llvm::Type *value_type;
 	llvm::ArrayType *pad_type;
 	int num_size;
@@ -65,7 +65,7 @@ LLVMDumper::LLVMDumper(LLVMCompiler *compiler_) : compiler(compiler_) {
 
 	M = compiler->getModule();
 	// get target size of pointer & double
-	type_info = new llvm::TargetData(M);
+	type_info = new llvm::DataLayout(M);
 	num_size = type_info->getTypeStoreSize(llvm::Type::getDoubleTy(getCtx()));
 	max_size = num_size;
 	ptr_size = type_info->getPointerSize();
@@ -184,7 +184,7 @@ void LLVMDumper::dump(const char *output, lua_State *L, Proto *p, int stripping)
 	std::string error;
 	llvm::Module *liblua_main = NULL;
 
-	out = new llvm::raw_fd_ostream(output, error, llvm::raw_fd_ostream::F_Binary);
+	out = new llvm::raw_fd_ostream(output, error, llvm::sys::fs::F_None);
 	if(error.empty()) {
 		compiler->setStripCode(stripping);
 		// Internalize all opcode functions.
