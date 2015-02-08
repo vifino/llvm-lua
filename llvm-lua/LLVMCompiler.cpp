@@ -28,13 +28,12 @@
 #include "llvm/IR/Module.h"
 #include "llvm/PassManager.h"
 #include "llvm/IR/Verifier.h"
-#include "llvm/Target/TargetData.h"
 #include "llvm/Target/TargetMachine.h"
 #include "llvm/Target/TargetOptions.h" 
 #include "llvm/Transforms/Scalar.h"
 #include "llvm/Transforms/IPO.h"
 #include "llvm/Transforms/Utils/Cloning.h"
-#include "llvm/Support/IRBuilder.h"
+#include "llvm/IR/IRBuilder.h"
 #include "llvm/Support/Timer.h"
 #include "llvm/Support/CommandLine.h"
 #include <cstdio>
@@ -345,7 +344,7 @@ LLVMCompiler::LLVMCompiler(int useJIT) {
 		llvm::TargetOptions options;
 		options.GuaranteedTailCallOpt = true;
 		options.JITEmitDebugInfo = false;
-		options.JITExceptionHandling = false;
+		//options.JITExceptionHandling = false;
 		engine.setTargetOptions(options);
 
 		llvm::CodeGenOpt::Level optLevel = llvm::CodeGenOpt::Aggressive;
@@ -387,9 +386,9 @@ LLVMCompiler::LLVMCompiler(int useJIT) {
 		// Set up the optimizer pipeline.  Start with registering info about how the
 		// target lays out data structures.
 		if(useJIT) {
-			TheFPM->add(new llvm::TargetData(*TheExecutionEngine->getTargetData()));
+			TheFPM->add(new llvm::DataLayoutPass(*TheExecutionEngine->getDataLayout()));
 		} else {
-			TheFPM->add(new llvm::TargetData(M));
+			TheFPM->add(new llvm::DataLayoutPass(M));
 		}
 		// mem2reg
 		TheFPM->add(llvm::createPromoteMemoryToRegisterPass());
@@ -399,7 +398,7 @@ LLVMCompiler::LLVMCompiler(int useJIT) {
 		TheFPM->add(llvm::createDeadCodeEliminationPass());
 		if(OptLevel > 2) {
 			// BlockPlacement
-			TheFPM->add(llvm::createBlockPlacementPass());
+			//TheFPM->add(new llvm::MachineBlockPlacement());
 			// Reassociate expressions.
 			TheFPM->add(llvm::createReassociatePass());
 			// Simplify the control flow graph (deleting unreachable blocks, etc).

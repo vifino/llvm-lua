@@ -25,7 +25,7 @@
 #ifndef LLVMCOMPILER_h
 #define LLVMCOMPILER_h
 
-#include "llvm/Support/IRBuilder.h"
+#include "llvm/IR/IRBuilder.h"
 #include "llvm/IR/Module.h"
 #include "llvm/IR/LLVMContext.h"
 

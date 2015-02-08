@@ -97,7 +97,7 @@ int main(int argc, char ** argv) {
 	}
 
 	llvm::cl::SetVersionPrinter(print_version);
-	llvm::cl::ParseCommandLineOptions(new_argc, argv, 0, true);
+	llvm::cl::ParseCommandLineOptions(new_argc, argv);
 	// Show version?
 	if(ShowVersion) {
 		print_version();

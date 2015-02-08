@@ -40,7 +40,7 @@ llvm::Module *load_embedded_bc(llvm::LLVMContext &context,
 {
 	llvm::Module *module = NULL;
 	llvm::StringRef mem_ref((const char *)start, len - 1);
-	std::string error;
+	std::error_code errorcode;
 
 	// Load in the bitcode file containing the functions for each
 	// bytecode operation.
@@ -48,19 +48,18 @@ llvm::Module *load_embedded_bc(llvm::LLVMContext &context,
 	llvm::MemoryBuffer* buffer;
 	buffer= llvm::MemoryBuffer::getMemBuffer(mem_ref, name);
 	if(buffer != NULL) {
-		module = llvm::getLazyBitcodeModule(buffer, context, &error);
+		llvm::ErrorOr<llvm::Module*> error = llvm::getLazyBitcodeModule(buffer, context);
+		module = error.get();
 		if(!module) {
 			delete buffer;
+			printf("Failed to parse embedded '%s' file: %s\n", name, error.getError().message().c_str());
+			exit(1);
 		}
-	}
-	if(!module) {
-		printf("Failed to parse embedded '%s' file: %s\n", name, error.c_str());
-		exit(1);
 	}
 	// Materialize module
 	if(NoLazyCompilation) {
-		if(module->MaterializeAll(&error)) {
-			printf("Failed to materialize embedded '%s' file: %s\n", name, error.c_str());
+		if((errorcode = module->materializeAll())) {
+			printf("Failed to materialize embedded '%s' file: %s\n", name, errorcode.message().c_str());
 			exit(1);
 		}
 	}
