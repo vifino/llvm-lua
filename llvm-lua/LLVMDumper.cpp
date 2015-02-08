@@ -24,7 +24,6 @@
 
 #include "llvm/IR/DerivedTypes.h"
 #include "llvm/IR/Module.h"
-#include "llvm/Target/TargetData.h"
 #include "llvm/Linker.h"
 #include "llvm/IR/Verifier.h"
 #include "llvm/Bitcode/ReaderWriter.h"
